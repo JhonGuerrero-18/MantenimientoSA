@@ -1,0 +1,49 @@
+# Archivos compilados
+*.class
+*.war
+*.ear
+*.jar
+
+# Directorios de construcción
+/target/
+/build/
+/bin/
+/out/
+/WEB-INF/classes/
+/WEB-INF/lib/
+
+# Archivos de IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.vscode/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración local
+*.properties
+*.settings
+
+# Archivos de base de datos
+*.sql
+*.db
+/database/
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+
+# Logs
+*.log
+logs/
+
+# Archivos de Maven
+dependency-reduced-pom.xml
+maven-*.xml
