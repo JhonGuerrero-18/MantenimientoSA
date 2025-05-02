@@ -1,6 +1,7 @@
 # Sistema de MantenimientoSA
 
 Aplicación web para la gestión de servicios de mantenimiento.
+Modulos del software inicio de sesión, registro y servicios.
 
 ## Tecnologías utilizadas
 - **Backend**: Java Servlets, JSP
