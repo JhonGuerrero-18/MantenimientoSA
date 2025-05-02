@@ -17,4 +17,4 @@ Aplicación web para la gestión de servicios de mantenimiento.
 ## Configuración inicial
 1. Clonar el repositorio:
    ```bash
-   git clone https://github.com/tuusuario/MantenimientoSA.git
+   git clone https://github.com/JhonGuerrero-18/MantenimientoSA.git
