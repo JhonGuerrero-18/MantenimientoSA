@@ -3,15 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Jhycelys/Desktop/Mantenimiento/MantenimientoSA/src/java/filters/NoCacheFilter.java</file>
             <file>file:/C:/Users/Jhycelys/Desktop/Mantenimiento/MantenimientoSA/web/pages/login.jsp</file>
-            <file>file:/C:/Users/Jhycelys/Desktop/Mantenimiento/MantenimientoSA/web/js/script.js</file>
             <file>file:/C:/Users/Jhycelys/Desktop/Mantenimiento/MantenimientoSA/src/java/controllers/LoginServlet.java</file>
             <file>file:/C:/Users/Jhycelys/Desktop/Mantenimiento/MantenimientoSA/src/java/controllers/TecnicoServlet.java</file>
             <file>file:/C:/Users/Jhycelys/Desktop/Mantenimiento/MantenimientoSA/src/java/utilities/DatabaseConnection.java</file>
             <file>file:/C:/Users/Jhycelys/Desktop/Mantenimiento/MantenimientoSA/web/pages/tecnicos.jsp</file>
             <file>file:/C:/Users/Jhycelys/Desktop/Mantenimiento/MantenimientoSA/src/java/utilities/TestConnection.java</file>
-            <file>file:/C:/Users/Jhycelys/Desktop/Mantenimiento/MantenimientoSA/src/java/models/Tecnico.java</file>
             <file>file:/C:/Users/Jhycelys/Desktop/Mantenimiento/MantenimientoSA/web/WEB-INF/web.xml</file>
         </group>
     </open-files>
