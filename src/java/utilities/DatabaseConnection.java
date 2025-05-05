@@ -1,20 +1,19 @@
 package utilities;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import javax.servlet.ServletContext;
 
 public class DatabaseConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/mantenimiento_sa?useSSL=false";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
-
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection(ServletContext context) throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/mantenimiento_sa?useSSL=false";
+        String user = "root";
+        String password = "";
+        
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            return DriverManager.getConnection(URL, USER, PASSWORD);
+            return DriverManager.getConnection(url, user, password);
         } catch (ClassNotFoundException e) {
-            throw new SQLException("Error: Driver MySQL no encontrado", e);
+            throw new SQLException("Driver MySQL no encontrado");
         }
     }
 }

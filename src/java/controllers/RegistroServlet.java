@@ -13,41 +13,57 @@ public class RegistroServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        request.setCharacterEncoding("UTF-8");
         String nombre = request.getParameter("nombre");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         
-        try (Connection conn = DatabaseConnection.getConnection()) {
+        try {
             // Verificar si el email ya existe
-            String checkSql = "SELECT * FROM usuario WHERE email = ?";
-            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
-            checkStmt.setString(1, email);
-            ResultSet rs = checkStmt.executeQuery();
-            
-            if (rs.next()) {
+            if (existeUsuario(email, request)) {
                 request.setAttribute("error", "El email ya está registrado");
                 request.getRequestDispatcher("/pages/registro.jsp").forward(request, response);
                 return;
             }
             
             // Registrar nuevo usuario
-            String insertSql = "INSERT INTO usuario (nombre, email, contraseña) VALUES (?, ?, ?)";
-            PreparedStatement insertStmt = conn.prepareStatement(insertSql);
-            insertStmt.setString(1, nombre);
-            insertStmt.setString(2, email);
-            insertStmt.setString(3, password);
+            registrarUsuario(nombre, email, password, request);
             
-            int rowsAffected = insertStmt.executeUpdate();
+            // Redirigir a login con mensaje de éxito
+            request.getSession().setAttribute("success", "Registro exitoso. Por favor inicie sesión.");
+            response.sendRedirect(request.getContextPath() + "/pages/login.jsp");
             
-            if (rowsAffected > 0) {
-                response.sendRedirect(request.getContextPath() + "/pages/login.jsp?registro=exitoso");
-            } else {
-                request.setAttribute("error", "Error al registrar usuario");
-                request.getRequestDispatcher("/pages/registro.jsp").forward(request, response);
-            }
         } catch (SQLException e) {
-            request.setAttribute("error", "Error de base de datos: " + e.getMessage());
+            request.setAttribute("error", "Error al registrar usuario: " + e.getMessage());
             request.getRequestDispatcher("/pages/registro.jsp").forward(request, response);
+            e.printStackTrace();
+        }
+    }
+
+    private boolean existeUsuario(String email, HttpServletRequest request) throws SQLException {
+        String sql = "SELECT id_usuario FROM usuario WHERE email = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection(request.getServletContext());
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+    
+    private void registrarUsuario(String nombre, String email, String password, HttpServletRequest request) 
+            throws SQLException {
+        String sql = "INSERT INTO usuario (nombre, email, contraseña) VALUES (?, ?, ?)";
+        
+        try (Connection conn = DatabaseConnection.getConnection(request.getServletContext());
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, nombre);
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.executeUpdate();
         }
     }
 }
