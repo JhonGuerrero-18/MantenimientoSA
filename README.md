@@ -22,6 +22,5 @@ Modulos del software inicio de sesión, registro y servicios.
 - Netbeans 8.2
 
 ## Repositorio en Github
-1. Clonar el repositorio:
-   ```bash
-   git clone [https://github.com/JhonGuerrero-18/MantenimientoSA.git](https://github.com/JhonGuerrero-18/MantenimientoSA.git)
+1. repositorio: el repositorio: https://github.com/JhonGuerrero-18/MantenimientoSA.git
+  
