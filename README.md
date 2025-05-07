@@ -3,7 +3,7 @@
 Aplicación web para la gestión de servicios de mantenimiento.
 Modulos del software inicio de sesión, registro y servicios.
 
-## direccion de paginas
+## Dirección de paginas
 - **src/java/ controller, models, filters y utilities. En estas estan los Java Servlets, JSP
 - **web: esta el proyecto y demas paginas como pages, js, css
 
