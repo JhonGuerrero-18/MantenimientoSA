@@ -21,7 +21,7 @@ Modulos del software inicio de sesión, registro y servicios.
 - Maven 3.6+ (opcional)
 - Netbeans 8.2
 
-## Configuración inicial
+## Repositorio en Github
 1. Clonar el repositorio:
    ```bash
    git clone [https://github.com/JhonGuerrero-18/MantenimientoSA.git](https://github.com/JhonGuerrero-18/MantenimientoSA.git)
