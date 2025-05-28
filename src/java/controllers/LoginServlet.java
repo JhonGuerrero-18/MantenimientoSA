@@ -10,15 +10,21 @@ import utilities.DatabaseConnection;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        // Configurar para manejar tanto formularios como JSON
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         
         try {
             Connection conn = DatabaseConnection.getConnection(getServletContext());
-            String sql = "SELECT id_usuario FROM usuario WHERE email = ? AND contraseña = ?";
+            // Query ajustada a tu estructura de BD
+            String sql = "SELECT id_usuario, nombre FROM usuario WHERE email = ? AND contraseña = ?";
             
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
@@ -27,12 +33,32 @@ public class LoginServlet extends HttpServlet {
             ResultSet rs = stmt.executeQuery();
             
             if (rs.next()) {
+                // Login exitoso
                 HttpSession session = request.getSession();
                 session.setAttribute("user", email);
-                response.sendRedirect("index.jsp");
+                session.setAttribute("userId", rs.getInt("id_usuario"));
+                session.setAttribute("userName", rs.getString("nombre"));
+                
+                // Actualizar último login
+                updateLastLogin(rs.getInt("id_usuario"), conn);
+                
+                // Si viene de React, enviar JSON
+                if (isJsonRequest(request)) {
+                    response.getWriter().write("{\"success\":true,\"message\":\"Login exitoso\",\"user\":\"" + email + "\"}");
+                } else {
+                    // Si viene de JSP, redirigir normalmente
+                    response.sendRedirect(request.getContextPath() + "/index.jsp");
+                }
+                
             } else {
-                request.setAttribute("error", "Credenciales incorrectas");
-                request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
+                // Credenciales incorrectas
+                if (isJsonRequest(request)) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("{\"success\":false,\"message\":\"Credenciales incorrectas\"}");
+                } else {
+                    request.setAttribute("error", "Credenciales incorrectas");
+                    request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
+                }
             }
             
             rs.close();
@@ -40,9 +66,37 @@ public class LoginServlet extends HttpServlet {
             conn.close();
             
         } catch (SQLException e) {
-            request.setAttribute("error", "Error de conexión: " + e.getMessage());
-            request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
+            if (isJsonRequest(request)) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("{\"success\":false,\"message\":\"Error de conexión: " + e.getMessage() + "\"}");
+            } else {
+                request.setAttribute("error", "Error de conexión: " + e.getMessage());
+                request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
+            }
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Actualizar último login del usuario
+     */
+    private void updateLastLogin(int userId, Connection conn) throws SQLException {
+        String sql = "UPDATE usuario SET ultimo_login = CURRENT_TIMESTAMP WHERE id_usuario = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            stmt.executeUpdate();
+        }
+    }
+    
+    /**
+     * Detectar si la request viene de React (JSON) o JSP (form)
+     */
+    private boolean isJsonRequest(HttpServletRequest request) {
+        String contentType = request.getContentType();
+        String accept = request.getHeader("Accept");
+        
+        return (contentType != null && contentType.contains("application/json")) ||
+               (accept != null && accept.contains("application/json")) ||
+               "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
     }
 }
