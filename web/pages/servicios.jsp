@@ -1,128 +1,182 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.List"%>
-<%@page import="models.Servicio"%>
-<%
-    // Verificación de sesión
-    if (session.getAttribute("user") == null) {
-        response.sendRedirect(request.getContextPath() + "/pages/login.jsp");
-        return;
-    }
-%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="dao.ServicioDAO" %>
+<%@ page import="models.Servicio" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Servicios | Mantenimiento S.A.</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Servicios - MantenimientoSA</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .table-responsive {
-            overflow-x: auto;
-        }
-        .badge {
-            font-size: 0.9em;
-            padding: 0.5em 0.75em;
-        }
-        .badge-warning {
-            background-color: #ffc107;
-            color: #212529;
-        }
-        .badge-success {
-            background-color: #198754;
-        }
-        .badge-info {
-            background-color: #0dcaf0;
-            color: #212529;
-        }
-    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+    .servicios-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        border: none;
+        overflow: hidden;
+    }
+    .servicios-header {
+        background-color: #0d6efd;
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+    }
+    .servicios-body {
+        padding: 2rem;
+    }
+    .btn-custom {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+        color: white;
+    }
+    .btn-custom:hover {
+        background: linear-gradient(135deg, #20c997, #28a745);
+        color: white;
+    }
+    .table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+    }
+    /* Arreglar hover de navbar - que NO se vea como botón */
+    .navbar .nav-link {
+        border-radius: 0 !important;
+        padding: 0.5rem 1rem !important;
+        border: none !important;
+        background: none !important;
+        text-decoration: none !important;
+    }
+    .navbar .nav-link:hover {
+        color: #e3f2fd !important;
+        background: none !important;
+        border: none !important;
+        text-decoration: none !important;
+        box-shadow: none !important;
+    }
+    .navbar .nav-link:focus {
+        background: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+</style>
 </head>
 <body>
     <jsp:include page="/WEB-INF/navbar.jsp"/>
 
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Servicios de Mantenimiento</h1>
-        
-        <% if (request.getAttribute("error") != null) { %>
-            <div class="alert alert-danger alert-dismissible fade show">
-                ${error}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <% } %>
-        
-        <% if (request.getParameter("success") != null) { %>
-            <div class="alert alert-success alert-dismissible fade show">
-                Servicio registrado correctamente
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <% } %>
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h3 class="card-title">Nuevo Servicio</h3>
-                        <form action="${pageContext.request.contextPath}/servicios" method="POST">
-                            <div class="mb-3">
-                                <label for="descripcion" class="form-label">Descripción</label>
-                                <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="fecha" class="form-label">Fecha</label>
-                                <input type="date" class="form-control" id="fecha" name="fecha" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Solicitar Servicio</button>
-                        </form>
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12">
+                <div class="card servicios-card">
+                    <div class="servicios-header">
+                        <h2><i class="fas fa-tools me-2"></i>Gestión de Servicios</h2>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h3>Servicios Registrados</h3>
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Descripción</th>
-                                <th>Fecha</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% 
-                            List<Servicio> servicios = (List<Servicio>) request.getAttribute("servicios");
-                            if (servicios != null && !servicios.isEmpty()) {
-                                for (Servicio servicio : servicios) { %>
+                    <div class="card-body servicios-body">
+                        <!-- Información del Sistema -->
+                        <div class="mb-3">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Modo JSP Tradicional:</strong> Esta página carga datos directamente desde el servidor.
+                                <a href="${pageContext.request.contextPath}/servicios.jsp" class="btn btn-sm btn-outline-primary ms-2">
+                                    <i class="fas fa-rocket me-1"></i>Ver Versión API
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Botones de Control -->
+                        <div class="mb-4">
+                            <a href="${pageContext.request.contextPath}/servicios?action=new" class="btn btn-custom">
+                                <i class="fas fa-plus me-2"></i>Agregar Nuevo Servicio
+                            </a>
+                            <a href="${pageContext.request.contextPath}/servicios" class="btn btn-info ms-2">
+                                <i class="fas fa-refresh me-2"></i>Recargar
+                            </a>
+                        </div>
+
+                        <!-- Tabla de Servicios -->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
                                     <tr>
-                                        <td><%= servicio.getId() %></td>
-                                        <td><%= servicio.getDescripcion() %></td>
-                                        <td><%= servicio.getFecha() != null ? servicio.getFecha().toString() : "" %></td>
-                                        <td>
-                                            <span class="badge <%= 
-                                                "Pendiente".equals(servicio.getEstado()) ? "bg-warning" : 
-                                                "Completado".equals(servicio.getEstado()) ? "bg-success" : "bg-info" %>">
-                                                <%= servicio.getEstado() %>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <% if ("Pendiente".equals(servicio.getEstado())) { %>
-                                                <form action="${pageContext.request.contextPath}/servicios?action=complete&id=<%= servicio.getId() %>" 
-                                                      method="POST" style="display: inline;">
-                                                    <button type="submit" class="btn btn-sm btn-success">Completar</button>
-                                                </form>
-                                            <% } %>
-                                        </td>
+                                        <th>ID</th>
+                                        <th>Descripción</th>
+                                        <th>Fecha</th>
+                                        <th>Usuario</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
                                     </tr>
-                                <% }
-                            } else { %>
-                                <tr>
-                                    <td colspan="5" class="text-center">No hay servicios registrados</td>
-                                </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
+                                </thead>
+                                <tbody>
+                                    <%
+                                        // Obtener servicios desde el servlet
+                                        List<Servicio> servicios = (List<Servicio>) request.getAttribute("servicios");
+                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                        
+                                        if (servicios != null && !servicios.isEmpty()) {
+                                            for (Servicio servicio : servicios) {
+                                    %>
+                                        <tr>
+                                            <td><%= servicio.getD_servicio() %></td>
+                                            <td><%= servicio.getDescripcion() %></td>
+                                            <td><%= servicio.getFecha() != null ? sdf.format(servicio.getFecha()) : "N/A" %></td>
+                                            <td>Usuario #<%= servicio.getId_usuario() %></td>
+                                            <td>
+                                                <% 
+                                                    String estado = servicio.getEstado();
+                                                    String badgeClass = "secondary";
+                                                    if ("Completado".equals(estado)) {
+                                                        badgeClass = "success";
+                                                    } else if ("En Proceso".equals(estado)) {
+                                                        badgeClass = "warning";
+                                                    } else if ("Pendiente".equals(estado)) {
+                                                        badgeClass = "primary";
+                                                    }
+                                                %>
+                                                <span class="badge bg-<%= badgeClass %>"><%= estado %></span>
+                                            </td>
+                                            <td>
+                                                <a href="${pageContext.request.contextPath}/servicios?action=edit&id=<%= servicio.getD_servicio() %>" 
+                                                   class="btn btn-sm btn-warning">
+                                                    <i class="fas fa-edit"></i> Editar
+                                                </a>
+                                                <a href="${pageContext.request.contextPath}/servicios?action=delete&id=<%= servicio.getD_servicio() %>" 
+                                                   class="btn btn-sm btn-danger ms-1"
+                                                   onclick="return confirm('¿Está seguro de eliminar este servicio?')">
+                                                    <i class="fas fa-trash"></i> Eliminar
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <%
+                                            }
+                                        } else {
+                                    %>
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted">
+                                                <i class="fas fa-info-circle me-2"></i>
+                                                No hay servicios registrados. 
+                                                <a href="${pageContext.request.contextPath}/servicios?action=new">Crear el primero</a>
+                                            </td>
+                                        </tr>
+                                    <%
+                                        }
+                                    %>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Información adicional -->
+                        <div class="mt-4">
+                            <div class="alert alert-light">
+                                <h6><i class="fas fa-lightbulb me-2"></i>Información:</h6>
+                                <ul class="mb-0">
+                                    <li>Esta página muestra todos los servicios de mantenimiento registrados</li>
+                                    <li>Puede crear, editar y eliminar servicios usando los botones correspondientes</li>
+                                    <li>Los estados indican el progreso de cada servicio</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -131,11 +185,5 @@
     <jsp:include page="/WEB-INF/footer.jsp"/>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Limpiar formulario después de enviar
-        if (window.history.replaceState) {
-            window.history.replaceState(null, null, window.location.href);
-        }
-    </script>
 </body>
 </html>
