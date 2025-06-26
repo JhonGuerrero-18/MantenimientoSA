@@ -17,27 +17,27 @@ Módulos Principales:
 
 2. Tecnologías Utilizadas
 Backend:
-Java Servlets + JSP
-JDBC + MySQL
-Arquitectura MVC
-Session Management
-Role-Based Access Control (RBAC)
+- Java Servlets + JSP
+- JDBC + MySQL
+- Arquitectura MVC
+- Session Management
+- Role-Based Access Control (RBAC)
 
 Frontend:
-HTML5 + CSS3 + JavaScript
-Bootstrap 5.3.2 (diseño responsive)
-FontAwesome 6.0 (iconos)
-JSP (páginas dinámicas)
-Base de Datos: MySQL 8.0+
-Tablas: usuario, servicio, tecnico
-Servidor: Apache Tomcat 9+
+- HTML5 + CSS3 + JavaScript
+- Bootstrap 5.3.2 (diseño responsive)
+- FontAwesome 6.0 (iconos)
+- JSP (páginas dinámicas)
+- Base de Datos: MySQL 8.0+
+- Tablas: usuario, servicio, tecnico
+- Servidor: Apache Tomcat 9+
 
 3. Requisitos del Sistema
-Java JDK 11 o superior
-Apache Tomcat 9+
-MySQL 5.7+
-NetBeans 8.2+ o Visual Studio Code
-Maven 3.6+ (opcional)
+- Java JDK 11 o superior
+- Apache Tomcat 9+
+- MySQL 5.7+
+- NetBeans 8.2+ o Visual Studio Code
+- Maven 3.6+ (opcional)
 
 4. Instalación y Configuración
 1. Clonar el repositorio:
