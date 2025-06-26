@@ -2,20 +2,20 @@ Sistema de MantenimientoSA
 Aplicación web para la gestión integral de servicios de mantenimiento con sistema de roles (admin, técnico, cliente).
 Incluye módulos de autenticación, gestión de servicios, técnicos y panel personalizado para clientes.
 
-🚀 Funcionalidades
+1. Funcionalidades
 Sistema de Roles:
-👑 Admin: Acceso completo (servicios + técnicos + usuarios)
-🔧 Técnico: Gestión de servicios (crear/editar, no eliminar)
-👤 Cliente: "Mis Servicios" (crear y ver solo sus servicios)
+- Admin: Acceso completo (servicios + técnicos + usuarios)
+- Técnico: Gestión de servicios (crear/editar, no eliminar)
+- Cliente: "Mis Servicios" (crear y ver solo sus servicios)
 
 Módulos Principales:
-✅ Autenticación: Login/registro con roles
-✅ Gestión de Servicios: CRUD completo con control de permisos
-✅ Gestión de Técnicos: Administración de personal
-✅ Panel Cliente: "Mis Servicios" con dashboard personalizado
-✅ Control de Acceso: Filtros de seguridad por rol
+- Autenticación: Login/registro con roles
+- Gestión de Servicios: CRUD completo con control de permisos
+- Gestión de Técnicos: Administración de personal
+- Panel Cliente: "Mis Servicios" con dashboard personalizado
+- Control de Acceso: Filtros de seguridad por rol
 
-💻 Tecnologías Utilizadas
+2. Tecnologías Utilizadas
 Backend:
 Java Servlets + JSP
 JDBC + MySQL
@@ -32,14 +32,14 @@ Base de Datos: MySQL 8.0+
 Tablas: usuario, servicio, tecnico
 Servidor: Apache Tomcat 9+
 
-⚙️ Requisitos del Sistema
+3. Requisitos del Sistema
 Java JDK 11 o superior
 Apache Tomcat 9+
 MySQL 5.7+
 NetBeans 8.2+ o Visual Studio Code
 Maven 3.6+ (opcional)
 
-🛠️ Instalación y Configuración
+4. Instalación y Configuración
 1. Clonar el repositorio:
 
 ## Repositorio en Github
