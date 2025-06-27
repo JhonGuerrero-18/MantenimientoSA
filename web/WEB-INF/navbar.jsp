@@ -1,4 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    String userRole = (String) session.getAttribute("userRole");
+%>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
     <div class="container">
         <a class="navbar-brand" href="${pageContext.request.contextPath}/index.jsp">
@@ -14,12 +17,24 @@
                     <a class="nav-link" href="${pageContext.request.contextPath}/index.jsp"><i class="fas fa-home me-1"></i> Inicio</a>
                 </li>
                 <% if (session.getAttribute("user") != null) { %>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/servicios"><i class="fas fa-tools me-1"></i> Servicios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/tecnicos"><i class="fas fa-user-cog me-1"></i> Técnicos</a>
-                    </li>
+                    <!-- Solo admin y tecnico pueden ver Servicios -->
+                    <% if ("admin".equals(userRole) || "tecnico".equals(userRole)) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/servicios"><i class="fas fa-tools me-1"></i> Servicios</a>
+                        </li>
+                    <% } %>
+                    <!-- Solo admin puede ver Técnicos -->
+                    <% if ("admin".equals(userRole)) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/tecnicos"><i class="fas fa-user-cog me-1"></i> Técnicos</a>
+                        </li>
+                    <% } %>
+                    <!-- NUEVO: Solo clientes pueden ver Mis Servicios -->
+                    <% if ("cliente".equals(userRole)) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/mis-servicios"><i class="fas fa-clipboard-list me-1"></i> Mis Servicios</a>
+                        </li>
+                    <% } %>
                 <% } %>
             </ul>
             <ul class="navbar-nav ms-auto">
@@ -27,6 +42,9 @@
                     <li class="nav-item">
                         <span class="nav-link">
                             <i class="fas fa-user-circle me-1"></i> <%= session.getAttribute("user") %>
+                            <% if (userRole != null) { %>
+                                <small class="badge bg-light text-dark ms-1"><%= userRole %></small>
+                            <% } %>
                         </span>
                     </li>
                     <li class="nav-item">

@@ -28,6 +28,13 @@ public class ServicioServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
+        // VALIDACIÓN DE ROL AGREGADA
+        String userRole = (String) request.getSession().getAttribute("userRole");
+        if (!("admin".equals(userRole) || "tecnico".equals(userRole))) {
+            response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+            return;
+        }
+        
         try {
             String action = request.getParameter("action");
             System.out.println("🔍 ServicioServlet GET - Action: " + action);
@@ -45,6 +52,11 @@ public class ServicioServlet extends HttpServlet {
                 request.getRequestDispatcher("/pages/form_servicio.jsp").forward(request, response);
                 return;
             } else if ("delete".equals(action)) {
+                // Solo admin puede eliminar
+                if (!"admin".equals(userRole)) {
+                    response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+                    return;
+                }
                 String idStr = request.getParameter("id");
                 if (idStr != null) {
                     int id = Integer.parseInt(idStr);
@@ -74,6 +86,13 @@ public class ServicioServlet extends HttpServlet {
             throws ServletException, IOException {
         
         System.out.println("📥 ServicioServlet POST REQUEST RECIBIDO");
+        
+        // VALIDACIÓN DE ROL AGREGADA
+        String userRole = (String) request.getSession().getAttribute("userRole");
+        if (!("admin".equals(userRole) || "tecnico".equals(userRole))) {
+            response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+            return;
+        }
         
         // CONFIGURAR ENCODING PARA CARACTERES ESPECIALES
         request.setCharacterEncoding("UTF-8");

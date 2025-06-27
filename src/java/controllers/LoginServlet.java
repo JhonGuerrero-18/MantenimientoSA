@@ -23,8 +23,8 @@ public class LoginServlet extends HttpServlet {
         
         try {
             Connection conn = DatabaseConnection.getConnection(getServletContext());
-            // Query ajustada a tu estructura de BD
-            String sql = "SELECT id_usuario, nombre FROM usuario WHERE email = ? AND contraseña = ?";
+            // Query ajustada para incluir rol
+            String sql = "SELECT id_usuario, nombre, rol FROM usuario WHERE email = ? AND contraseña = ?"; // MODIFICADO
             
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
@@ -38,13 +38,14 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("user", email);
                 session.setAttribute("userId", rs.getInt("id_usuario"));
                 session.setAttribute("userName", rs.getString("nombre"));
+                session.setAttribute("userRole", rs.getString("rol")); // AGREGADO
                 
                 // Actualizar último login
                 updateLastLogin(rs.getInt("id_usuario"), conn);
                 
                 // Si viene de React, enviar JSON
                 if (isJsonRequest(request)) {
-                    response.getWriter().write("{\"success\":true,\"message\":\"Login exitoso\",\"user\":\"" + email + "\"}");
+                    response.getWriter().write("{\"success\":true,\"message\":\"Login exitoso\",\"user\":\"" + email + "\",\"role\":\"" + rs.getString("rol") + "\"}"); // MODIFICADO
                 } else {
                     // Si viene de JSP, redirigir normalmente
                     response.sendRedirect(request.getContextPath() + "/index.jsp");

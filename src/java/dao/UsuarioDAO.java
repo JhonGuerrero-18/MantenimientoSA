@@ -38,6 +38,7 @@ public class UsuarioDAO {
                 usuario.setContraseña(rs.getString("contraseña"));
                 usuario.setFecha_creacion(rs.getTimestamp("fecha_creacion"));
                 usuario.setUltimo_login(rs.getTimestamp("ultimo_login"));
+                usuario.setRol(rs.getString("rol")); // AGREGADO
                 usuarios.add(usuario);
             }
             
@@ -71,11 +72,12 @@ public class UsuarioDAO {
                 usuario.setContraseña(rs.getString("contraseña"));
                 usuario.setFecha_creacion(rs.getTimestamp("fecha_creacion"));
                 usuario.setUltimo_login(rs.getTimestamp("ultimo_login"));
+                usuario.setRol(rs.getString("rol")); // AGREGADO
                 
                 // Actualizar ultimo_login
                 actualizarUltimoLogin(usuario.getId_usuario());
                 
-                System.out.println("✅ Login exitoso para: " + usuario.getNombre());
+                System.out.println("✅ Login exitoso para: " + usuario.getNombre() + " (Rol: " + usuario.getRol() + ")");
                 return usuario;
             } else {
                 System.out.println("❌ Credenciales incorrectas para: " + email);
@@ -90,7 +92,7 @@ public class UsuarioDAO {
     }
     
     public boolean registrar(Usuario usuario) {
-        String sql = "INSERT INTO usuario (nombre, email, contraseña, fecha_creacion) VALUES (?, ?, ?, NOW())";
+        String sql = "INSERT INTO usuario (nombre, email, contraseña, rol, fecha_creacion) VALUES (?, ?, ?, ?, NOW())"; // MODIFICADO
         
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -100,6 +102,7 @@ public class UsuarioDAO {
             stmt.setString(1, usuario.getNombre());
             stmt.setString(2, usuario.getEmail());
             stmt.setString(3, usuario.getContraseña());
+            stmt.setString(4, usuario.getRol() != null ? usuario.getRol() : "cliente"); // AGREGADO
             
             boolean exito = stmt.executeUpdate() > 0;
             System.out.println("✅ Usuario registrado: " + exito);

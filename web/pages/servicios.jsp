@@ -3,6 +3,12 @@
 <%@ page import="models.Servicio" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%
+// AGREGADO: Variables para control de roles
+String userRole = (String) session.getAttribute("userRole");
+boolean canEdit = "admin".equals(userRole) || "tecnico".equals(userRole);
+boolean canDelete = "admin".equals(userRole);
+%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -84,11 +90,13 @@
                             </div>
                         </div>
 
-                        <!-- Botones de Control -->
+                        <!-- Botones de Control - MODIFICADO CON ROLES -->
                         <div class="mb-4">
-                            <a href="${pageContext.request.contextPath}/servicios?action=new" class="btn btn-custom">
-                                <i class="fas fa-plus me-2"></i>Agregar Nuevo Servicio
-                            </a>
+                            <% if (canEdit) { %>
+                                <a href="${pageContext.request.contextPath}/servicios?action=new" class="btn btn-custom">
+                                    <i class="fas fa-plus me-2"></i>Agregar Nuevo Servicio
+                                </a>
+                            <% } %>
                             <a href="${pageContext.request.contextPath}/servicios" class="btn btn-info ms-2">
                                 <i class="fas fa-refresh me-2"></i>Recargar
                             </a>
@@ -135,16 +143,24 @@
                                                 %>
                                                 <span class="badge bg-<%= badgeClass %>"><%= estado %></span>
                                             </td>
+                                            <!-- COLUMNA DE ACCIONES MODIFICADA CON ROLES -->
                                             <td>
-                                                <a href="${pageContext.request.contextPath}/servicios?action=edit&id=<%= servicio.getD_servicio() %>" 
-                                                   class="btn btn-sm btn-warning">
-                                                    <i class="fas fa-edit"></i> Editar
-                                                </a>
-                                                <a href="${pageContext.request.contextPath}/servicios?action=delete&id=<%= servicio.getD_servicio() %>" 
-                                                   class="btn btn-sm btn-danger ms-1"
-                                                   onclick="return confirm('¿Está seguro de eliminar este servicio?')">
-                                                    <i class="fas fa-trash"></i> Eliminar
-                                                </a>
+                                                <% if (canEdit) { %>
+                                                    <a href="${pageContext.request.contextPath}/servicios?action=edit&id=<%= servicio.getD_servicio() %>" 
+                                                       class="btn btn-sm btn-warning">
+                                                        <i class="fas fa-edit"></i> Editar
+                                                    </a>
+                                                <% } %>
+                                                <% if (canDelete) { %>
+                                                    <a href="${pageContext.request.contextPath}/servicios?action=delete&id=<%= servicio.getD_servicio() %>" 
+                                                       class="btn btn-sm btn-danger ms-1"
+                                                       onclick="return confirm('¿Está seguro de eliminar este servicio?')">
+                                                        <i class="fas fa-trash"></i> Eliminar
+                                                    </a>
+                                                <% } %>
+                                                <% if (!canEdit && !canDelete) { %>
+                                                    <span class="text-muted small">Sin permisos</span>
+                                                <% } %>
                                             </td>
                                         </tr>
                                     <%
@@ -155,7 +171,9 @@
                                             <td colspan="6" class="text-center text-muted">
                                                 <i class="fas fa-info-circle me-2"></i>
                                                 No hay servicios registrados. 
-                                                <a href="${pageContext.request.contextPath}/servicios?action=new">Crear el primero</a>
+                                                <% if (canEdit) { %>
+                                                    <a href="${pageContext.request.contextPath}/servicios?action=new">Crear el primero</a>
+                                                <% } %>
                                             </td>
                                         </tr>
                                     <%
@@ -171,8 +189,16 @@
                                 <h6><i class="fas fa-lightbulb me-2"></i>Información:</h6>
                                 <ul class="mb-0">
                                     <li>Esta página muestra todos los servicios de mantenimiento registrados</li>
-                                    <li>Puede crear, editar y eliminar servicios usando los botones correspondientes</li>
+                                    <% if (canEdit) { %>
+                                        <li>Puede crear, editar servicios usando los botones correspondientes</li>
+                                    <% } %>
+                                    <% if (canDelete) { %>
+                                        <li>Puede eliminar servicios (solo administradores)</li>
+                                    <% } %>
                                     <li>Los estados indican el progreso de cada servicio</li>
+                                    <% if (userRole != null) { %>
+                                        <li><strong>Su rol:</strong> <span class="badge bg-primary"><%= userRole %></span></li>
+                                    <% } %>
                                 </ul>
                             </div>
                         </div>
