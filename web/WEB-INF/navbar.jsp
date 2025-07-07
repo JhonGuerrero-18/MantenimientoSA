@@ -2,6 +2,19 @@
 <%
     String userRole = (String) session.getAttribute("userRole");
 %>
+<style>
+    /* Corregir el hover del botón de cerrar sesión */
+    .btn-outline-light:hover {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        border-color: white !important;
+    }
+    .btn-outline-light {
+        color: white !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+</style>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
     <div class="container">
         <a class="navbar-brand" href="${pageContext.request.contextPath}/index.jsp">
@@ -29,7 +42,19 @@
                             <a class="nav-link" href="${pageContext.request.contextPath}/tecnicos"><i class="fas fa-user-cog me-1"></i> Técnicos</a>
                         </li>
                     <% } %>
-                    <!-- NUEVO: Solo clientes pueden ver Mis Servicios -->
+                    <!-- Solo admin puede ver Gestión de Usuarios -->
+                    <% if ("admin".equals(userRole)) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/usuarios"><i class="fas fa-users me-1"></i> Usuarios</a>
+                        </li>
+                    <% } %>
+                    <!-- NUEVO: Solo admin puede ver Asignaciones -->
+                    <% if ("admin".equals(userRole)) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/asignaciones"><i class="fas fa-tasks me-1"></i> Asignaciones</a>
+                        </li>
+                    <% } %>
+                    <!-- Solo clientes pueden ver Mis Servicios -->
                     <% if ("cliente".equals(userRole)) { %>
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/mis-servicios"><i class="fas fa-clipboard-list me-1"></i> Mis Servicios</a>
@@ -48,7 +73,7 @@
                         </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-outline-light btn-sm ms-2" href="${pageContext.request.contextPath}/logout">
+                        <a class="nav-link btn btn-outline-light btn-sm ms-2" href="${pageContext.request.contextPath}/logout" style="color: white !important;">
                             <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
                         </a>
                     </li>

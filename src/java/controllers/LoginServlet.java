@@ -7,7 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import utilities.DatabaseConnection;
 
-@WebServlet("/login")
+// @WebServlet("/login")  ← COMENTAR
 public class LoginServlet extends HttpServlet {
 
     @Override

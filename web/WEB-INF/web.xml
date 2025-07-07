@@ -12,7 +12,73 @@
     </welcome-file-list>
     
     <!-- ========================================= -->
-    <!-- SERVLET TRADICIONAL PARA JSP -->
+    <!-- FILTROS DE SEGURIDAD -->
+    <!-- ========================================= -->
+    <filter>
+        <filter-name>AuthorizationFilter</filter-name>
+        <filter-class>filters.AuthorizationFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>AuthorizationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>NoCacheFilter</filter-name>
+        <filter-class>filters.NoCacheFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>NoCacheFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>CORSFilter</filter-name>
+        <filter-class>filters.CORSFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>CORSFilter</filter-name>
+        <url-pattern>/api/*</url-pattern>
+    </filter-mapping>
+    
+    <!-- ========================================= -->
+    <!-- SERVLETS DE AUTENTICACIÓN -->
+    <!-- ========================================= -->
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>controllers.LoginServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>controllers.LogoutServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>RegistroServlet</servlet-name>
+        <servlet-class>controllers.RegistroServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>RegistroServlet</servlet-name>
+        <url-pattern>/registro</url-pattern>
+    </servlet-mapping>
+    
+    <!-- ========================================= -->
+    <!-- SERVLETS JSP TRADICIONALES -->
     <!-- ========================================= -->
     <servlet>
         <servlet-name>ServicioServlet</servlet-name>
@@ -25,14 +91,57 @@
         <url-pattern>/servicios</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>MisServiciosServlet</servlet-name>
+        <servlet-class>controllers.MisServiciosServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>MisServiciosServlet</servlet-name>
+        <url-pattern>/mis-servicios</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>UsuariosServlet</servlet-name>
+        <servlet-class>controllers.UsuariosServlet</servlet-class>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>UsuariosServlet</servlet-name>
+        <url-pattern>/usuarios</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>TecnicoServlet</servlet-name>
+        <servlet-class>controllers.TecnicoServlet</servlet-class>
+        <load-on-startup>4</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>TecnicoServlet</servlet-name>
+        <url-pattern>/tecnicos</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>AsignacionServlet</servlet-name>
+        <servlet-class>controllers.AsignacionServlet</servlet-class>
+        <load-on-startup>5</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>AsignacionServlet</servlet-name>
+        <url-pattern>/asignaciones</url-pattern>
+    </servlet-mapping>
     
     <!-- ========================================= -->
-    <!-- SERVLET API REST -->
+    <!-- SERVLETS API REST -->
     <!-- ========================================= -->
     <servlet>
         <servlet-name>ServiciosAPIServlet</servlet-name>
         <servlet-class>controllers.ServiciosAPIServlet</servlet-class>
-        <load-on-startup>2</load-on-startup>
+        <load-on-startup>6</load-on-startup>
     </servlet>
     
     <servlet-mapping>
@@ -45,13 +154,10 @@
         <url-pattern>/api/servicios/*</url-pattern>
     </servlet-mapping>
     
-        <!-- ========================================= -->
-    <!-- SERVLET AUTH API -->
-    <!-- ========================================= -->
     <servlet>
         <servlet-name>AuthAPIServlet</servlet-name>
         <servlet-class>controllers.AuthAPIServlet</servlet-class>
-        <load-on-startup>3</load-on-startup>
+        <load-on-startup>7</load-on-startup>
     </servlet>
     
     <servlet-mapping>
@@ -64,5 +170,34 @@
         <url-pattern>/api/auth/*</url-pattern>
     </servlet-mapping>
     
+    <!-- ========================================= -->
+    <!-- SERVLETS DE TESTING (OPCIONAL) -->
+    <!-- ========================================= -->
+    <servlet>
+        <servlet-name>TestConexion</servlet-name>
+        <servlet-class>controllers.TestConexion</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>TestConexion</servlet-name>
+        <url-pattern>/test-conexion</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>TestPostman</servlet-name>
+        <servlet-class>controllers.TestPostman</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>TestPostman</servlet-name>
+        <url-pattern>/test-postman</url-pattern>
+    </servlet-mapping>
+    
+    <!-- ========================================= -->
+    <!-- CONFIGURACIÓN DE SESIONES -->
+    <!-- ========================================= -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
     
 </web-app>

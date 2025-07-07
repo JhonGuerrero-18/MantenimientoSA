@@ -10,7 +10,7 @@ import javax.servlet.http.*;
 import models.Tecnico;
 import utilities.DatabaseConnection;
 
-@WebServlet("/tecnicos")
+//@WebServlet("/tecnicos")
 public class TecnicoServlet extends HttpServlet {
 
     @Override

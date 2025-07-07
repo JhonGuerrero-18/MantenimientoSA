@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 
-@WebServlet("/test-conexion")
+//@WebServlet("/test-conexion")
 public class TestConexion extends HttpServlet {
     
     @Override

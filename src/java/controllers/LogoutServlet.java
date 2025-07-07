@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet("/logout")  // Anotación que lo convierte en Servlet
+//@WebServlet("/logout")  // Anotación que lo convierte en Servlet
 public class LogoutServlet extends HttpServlet {  // Extiende de HttpServlet
     
     // Método para manejar solicitudes GET (ej: al hacer clic en "Cerrar Sesión")

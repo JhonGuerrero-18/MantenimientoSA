@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/mis-servicios")
+//@WebServlet("/mis-servicios")
 public class MisServiciosServlet extends HttpServlet {
     
     private ServicioDAO servicioDAO;
